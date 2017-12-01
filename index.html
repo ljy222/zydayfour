@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" >
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <link rel="stylesheet" type="text/css" href="fonts2/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="css/swiper.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+     <div class="wrap">
+         <header>
+            <a href="#"><img src="images/a.jpg" alt=""></a>
+            <a href="#">
+                <i class="icon iconfont icon-fangdajing"></i>
+                <i class="icon iconfont icon-fenlei-xuanzhong"></i>
+            </a>
+         </header>
+        <section>
+        <div class="swiper-container">
+             <div class="swiper-wrapper">
+
+            </div>
+            <div class="swiper-pagination page"></div>
+        </div>
+            <div class="right">
+                <h5><b><i class="icon iconfont icon-dingwei"></i></b>
+                <b>2017-11-30</b></h5>
+                <h5><b><i class="icon iconfont icon-42"></i></b>
+                <b>2017-11-30</b></h5>
+            </div>
+            <div class="text">
+                <p>便捷服务</p>
+            </div>
+            <ul class="list">
+            </ul>
+        </section>
+
+     </div>
+     <script src="js/swiper.min.js"></script>
+     <script>
+         setTimeout(function(){
+            var newswiper=new Swiper(".swiper-container",{
+                loop:true,
+                autoplay:1000,
+                pagination:".swiper-pagination",
+                paginationClickable:true,
+                autoplayDisableOnInteraction:false,
+            });
+         },200)
+         function ajax(url){
+		return new Promise(function(resolve , reject){
+			var xhr = null;
+			if(window.XMLHttpRequest){
+				xhr = new XMLHttpRequest();
+			}else{
+				xhr = new ActiveXObject("Microsoft.XMLHTTP")
+			}
+			var hande = function(){
+				if(xhr.readyState !== 4) return;
+				if(xhr.status == 200){
+					resolve(xhr.responseText)
+				}else{
+					reject()
+				}
+			}
+                xhr.open("GET",url,true);
+                xhr.send();
+                xhr.onreadystatechange = hande;
+		    })
+        }
+        ajax("http://localhost:8880/data").then(function(response){
+            var obj=xr(JSON.parse(response))
+        })
+        var swiperWrapper=document.querySelector(".swiper-wrapper");
+        var right=document.querySelector(".right");
+        var list=document.querySelector(".list");
+        function xr(obj){
+            var str='';
+            obj.one.forEach(function(file){
+                    str+=`<div class="swiper-slide">
+                    <img src='${file.img}' alt="" />
+                </div>`
+            })
+            swiperWrapper.innerHTML=str;
+            var str1='';
+            obj.two.forEach(function(file){
+                    str1+=`<h5><b><i class="icon iconfont icon-dingwei"></i><span>${file.txt}</span></b>
+                <b>2017-11-30</b></h5>`
+            })
+            right.innerHTML=str1;
+            var str2='';
+            obj.five.forEach(function(file){
+                    str2+=`<li><i class="icon iconfont icon-tianmao2"></i><span>${file.list}</span></li>`
+            })
+            list.innerHTML=str2;
+        }
+     </script>
+</body>
+</html>
